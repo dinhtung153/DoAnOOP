@@ -359,7 +359,6 @@ public class FamilyTreeView extends JFrame {
 		textField_Spouse.setText("");
 		textField_Children.setText("");
 		buttonGroupSex.clearSelection();
-		this.textField_Name.setEditable(true);
 	}
 
 	public void deletePerson() {
@@ -382,7 +381,9 @@ public class FamilyTreeView extends JFrame {
 				tree.updateUI();
 			}
 		}
-		this.textField_Name.setEditable(true);
+		Person parent = FamilyTreeModel.people.get(parentNode.getUserObject());
+		Person person = FamilyTreeModel.people.get(selectedNode.getUserObject());
+		parent.getChildren().remove(person);
 	}
 
 	public Person getSelectedPerson() {

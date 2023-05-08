@@ -11,7 +11,7 @@ public class FamilyTreeTest {
 			frame.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		} 
 	}
 }
 

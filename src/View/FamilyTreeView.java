@@ -119,7 +119,7 @@ public class FamilyTreeView extends JFrame {
 		JScrollPane scrollPane = new JScrollPane(tree);
 		scrollPane.setVerticalScrollBar(new ScrollBarCustom());
 		ScrollBarCustom sp1 = new ScrollBarCustom();
-        sp1.setOrientation(JScrollBar.HORIZONTAL);
+        	sp1.setOrientation(JScrollBar.HORIZONTAL);
 		scrollPane.setHorizontalScrollBar(sp1);
 		scrollPane.setBounds(5, 0, 252, 325);
 		contentPane.add(scrollPane);
@@ -270,75 +270,75 @@ public class FamilyTreeView extends JFrame {
 		nameLabel.setBounds(10, 9, 110, 30);
 		nameLabel.setForeground(new Color(107, 112, 92));
 		detailPanel.add(nameLabel);
-        tree.addTreeSelectionListener(e -> {
-            DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-            if (selectedNode != null && selectedNode.getUserObject() instanceof String) {
-                Person person = FamilyTreeModel.people.get(selectedNode.getUserObject());
-                nameLabel.setText(person.getName());
-                
-                if (person.isMale()) {
-                	ImageIcon icon = new ImageIcon(getClass().getResource("/Images/boy.png"));
-                    BufferedImage bufferedImage = new BufferedImage(181, 181, BufferedImage.TYPE_INT_ARGB);
-                    Graphics2D g2d = bufferedImage.createGraphics();
-                    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                    g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-                    g2d.drawImage(icon.getImage(), 0, 0, 181, 181, null);
-                    g2d.dispose();
-                    ImageIcon newIcon = new ImageIcon(bufferedImage);
-                    photoLabel.setIcon(newIcon);
-                } else {
-                	ImageIcon icon = new ImageIcon(getClass().getResource("/Images/girl.png"));
-                    BufferedImage bufferedImage = new BufferedImage(181, 181, BufferedImage.TYPE_INT_ARGB);
-                    Graphics2D g2d = bufferedImage.createGraphics();
-                    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                    g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-                    g2d.drawImage(icon.getImage(), 0, 0, 181, 181, null);
-                    g2d.dispose();
-                    ImageIcon newIcon = new ImageIcon(bufferedImage);
-                    photoLabel.setIcon(newIcon);
-                }
-                
-                birthYearLabel.setText("Birth Year: " + person.getBirthYear());
+		tree.addTreeSelectionListener(e -> {
+		    DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+		    if (selectedNode != null && selectedNode.getUserObject() instanceof String) {
+			Person person = FamilyTreeModel.people.get(selectedNode.getUserObject());
+			nameLabel.setText(person.getName());
 
-                Person mother = person.getMother();
-                if (mother != null) {
-                    motherLabel.setText("Mother: " + mother.getName());
-                } else {
-                    motherLabel.setText("Mother: Unknown");
-                }
+			if (person.isMale()) {
+				ImageIcon icon = new ImageIcon(getClass().getResource("/Images/boy.png"));
+			    BufferedImage bufferedImage = new BufferedImage(181, 181, BufferedImage.TYPE_INT_ARGB);
+			    Graphics2D g2d = bufferedImage.createGraphics();
+			    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			    g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+			    g2d.drawImage(icon.getImage(), 0, 0, 181, 181, null);
+			    g2d.dispose();
+			    ImageIcon newIcon = new ImageIcon(bufferedImage);
+			    photoLabel.setIcon(newIcon);
+			} else {
+				ImageIcon icon = new ImageIcon(getClass().getResource("/Images/girl.png"));
+			    BufferedImage bufferedImage = new BufferedImage(181, 181, BufferedImage.TYPE_INT_ARGB);
+			    Graphics2D g2d = bufferedImage.createGraphics();
+			    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			    g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+			    g2d.drawImage(icon.getImage(), 0, 0, 181, 181, null);
+			    g2d.dispose();
+			    ImageIcon newIcon = new ImageIcon(bufferedImage);
+			    photoLabel.setIcon(newIcon);
+			}
 
-                Person father = person.getFather();
-                if (father != null) {
-                    fatherLabel.setText("Father: " + father.getName());
-                } else {
-                    fatherLabel.setText("Father: Unknown");
-                }
+			birthYearLabel.setText("Birth Year: " + person.getBirthYear());
 
-                Person spouse = person.getSpouse();
-                if (spouse != null) {
-                    spouseLabel.setText("Spouse: " + person.getSpouse().getName());
-                } else {
-                    spouseLabel.setText("Spouse: null");
-                }
+			Person mother = person.getMother();
+			if (mother != null) {
+			    motherLabel.setText("Mother: " + mother.getName());
+			} else {
+			    motherLabel.setText("Mother: Unknown");
+			}
 
-                ArrayList<Person> children = person.getChildren();
+			Person father = person.getFather();
+			if (father != null) {
+			    fatherLabel.setText("Father: " + father.getName());
+			} else {
+			    fatherLabel.setText("Father: Unknown");
+			}
 
-                if (children.size() > 0) {
-                    String string = "Children: ";
-                    for (int i = 0; i < children.size(); i++) {
-                        if (i == children.size() - 1) {
-                            string = string + children.get(i).getName();
-                        } else {
-                            string = string + children.get(i).getName() + ", ";
-                        }
-                    }
-                    childrenLabel.setText(string);
-                } else {
-                	childrenLabel.setText("Children: null");
-                }
-            }
-        });
-	}
+			Person spouse = person.getSpouse();
+			if (spouse != null) {
+			    spouseLabel.setText("Spouse: " + person.getSpouse().getName());
+			} else {
+			    spouseLabel.setText("Spouse: null");
+			}
+
+			ArrayList<Person> children = person.getChildren();
+
+			if (children.size() > 0) {
+			    String string = "Children: ";
+			    for (int i = 0; i < children.size(); i++) {
+				if (i == children.size() - 1) {
+				    string = string + children.get(i).getName();
+				} else {
+				    string = string + children.get(i).getName() + ", ";
+				}
+			    }
+			    childrenLabel.setText(string);
+			} else {
+				childrenLabel.setText("Children: null");
+			}
+		    }
+		});
+		}
 
 
 	public static void createTreeNodes(DefaultMutableTreeNode rootNode, Person person) {
@@ -361,7 +361,6 @@ public class FamilyTreeView extends JFrame {
 		textField_Spouse.setText("");
 		textField_Children.setText("");
 		buttonGroupSex.clearSelection();
-		this.textField_Name.setEditable(true);
 	}
 
 	public void deletePerson() {

@@ -21,6 +21,7 @@ import Custom.Button;
 import Custom.CustomTreeCellRenderer;
 import Custom.RadioButtonCustom;
 import Custom.ScrollBarCustom;
+import Custom.*;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -72,6 +73,7 @@ public class FamilyTreeView extends JFrame {
 		setResizable(false);
 		setTitle("Family Tree");
 		setLocationRelativeTo(null);
+		GlassPanePopup.install(this);
 		FamilyTreeController action = new FamilyTreeController(this);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(250, 237, 205));
@@ -265,7 +267,7 @@ public class FamilyTreeView extends JFrame {
 		
 		JLabel nameLabel = new JLabel();
 		nameLabel.setFont(new Font("Tahoma", Font.BOLD, 19));
-		nameLabel.setBounds(10, 9, 96, 30);
+		nameLabel.setBounds(10, 9, 110, 30);
 		nameLabel.setForeground(new Color(107, 112, 92));
 		detailPanel.add(nameLabel);
         tree.addTreeSelectionListener(e -> {
@@ -372,7 +374,6 @@ public class FamilyTreeView extends JFrame {
 			}
 
 		} else {
-			// delete non-leaf node and all its children
 			if (parentNode != null) {
 				while (selectedNode.getChildCount() > 0) {
 					DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) selectedNode.getFirstChild();
@@ -382,7 +383,9 @@ public class FamilyTreeView extends JFrame {
 				tree.updateUI();
 			}
 		}
-		this.textField_Name.setEditable(true);
+		Person parent = FamilyTreeModel.people.get(parentNode.getUserObject());
+		Person person = FamilyTreeModel.people.get(selectedNode.getUserObject());
+		parent.getChildren().remove(person);
 	}
 
 	public Person getSelectedPerson() {

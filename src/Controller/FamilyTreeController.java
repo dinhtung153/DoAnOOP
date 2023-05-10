@@ -2,8 +2,13 @@ package Controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.tree.DefaultMutableTreeNode;
+
 import View.FamilyTreeView;
 import Custom.*;
+import Model.FamilyTreeModel;
+import Model.Person;
 
 
 
@@ -25,6 +30,13 @@ public class FamilyTreeController implements ActionListener{
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				Message obj = new Message();
+				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) FamilyTreeView.tree.getLastSelectedPathComponent();
+				Person person = FamilyTreeModel.people.get(selectedNode.getUserObject());
+				if (person.equals(FamilyTreeView.model.getRoot())) {
+					obj.txt.setText("You can't delete root person!");
+				} else {
+					obj.txt.setText("You need to choose family member first!");
+				}
 		        obj.eventOK(new ActionListener() {
 		            @Override
 		            public void actionPerformed(ActionEvent ae) {
@@ -40,6 +52,7 @@ public class FamilyTreeController implements ActionListener{
 			} catch (Exception e2) {
 				// TODO Auto-generated catch block
 				Message obj = new Message();
+				obj.txt.setText("You need to choose family member first!");
 		        obj.eventOK(new ActionListener() {
 		            @Override
 		            public void actionPerformed(ActionEvent ae) {

@@ -27,24 +27,35 @@ public class FamilyTreeController implements ActionListener{
 		} else if (command.equals("Delete")) {
 			try {
 				this.FamilyTreeView.deletePerson();
-			} catch (Exception e1) {
+			} catch (NullPointerException e1) {
 				// TODO Auto-generated catch block
-				Message obj = new Message();
-				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) FamilyTreeView.tree.getLastSelectedPathComponent();
-				Person person = FamilyTreeModel.people.get(selectedNode.getUserObject());
-				if (person.equals(FamilyTreeView.model.getRoot())) {
-					obj.txt.setText("You can't delete root person!");
-				} else {
+				try {
+					Message obj = new Message();
+					DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) FamilyTreeView.tree.getLastSelectedPathComponent();
+					Person person = FamilyTreeModel.people.get(selectedNode.getUserObject());
+					if (person.equals(FamilyTreeView.model.getRoot())) {
+						obj.txt.setText("You can't delete root person!");
+					}
+			        obj.eventOK(new ActionListener() {
+			            @Override
+			            public void actionPerformed(ActionEvent ae) {
+			                System.out.println("Click OK");
+			                GlassPanePopup.closePopupLast();
+			            }
+			        });
+			        GlassPanePopup.showPopup(obj);
+				} catch (Exception e2) {
+					Message obj = new Message();
 					obj.txt.setText("You need to choose family member first!");
+					obj.eventOK(new ActionListener() {
+					    @Override
+					    public void actionPerformed(ActionEvent ae) {
+					        System.out.println("Click OK");
+					        GlassPanePopup.closePopupLast();
+					    }
+					});
+					GlassPanePopup.showPopup(obj);
 				}
-		        obj.eventOK(new ActionListener() {
-		            @Override
-		            public void actionPerformed(ActionEvent ae) {
-		                System.out.println("Click OK");
-		                GlassPanePopup.closePopupLast();
-		            }
-		        });
-		        GlassPanePopup.showPopup(obj);
 			}
 		} else if (command.equals("Update")) {
 			try {

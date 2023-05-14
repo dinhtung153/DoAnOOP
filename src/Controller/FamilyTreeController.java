@@ -17,7 +17,6 @@ public class FamilyTreeController implements ActionListener{
 	public FamilyTreeController(FamilyTreeView FamilyTreeView) {
 		this.FamilyTreeView = FamilyTreeView;
 	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -91,6 +90,8 @@ public class FamilyTreeController implements ActionListener{
 		        });
 		        GlassPanePopup.showPopup(obj);
 			}
+		} else if (command.equals("Search")) {
+			this.FamilyTreeView.findPerson();
 		}
 	}
 }

@@ -2,7 +2,6 @@ package View;
 
 import java.awt.Color;
 import java.awt.EventQueue;
-import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -16,7 +15,6 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-
 import Custom.*;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
@@ -25,29 +23,33 @@ import javax.swing.tree.TreeNode;
 import java.util.Enumeration;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
-
 import Controller.FamilyTreeController;
 import Model.Person;
 import Model.FamilyTreeModel;
 import javax.swing.JTextField;
-import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class FamilyTreeView extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	public FamilyTreeModel model;
 	public JTree tree;
-	public TextFieldCustom textField_Name;
-	public TextFieldCustom textField_BirthYear;
-	public TextFieldCustom textField_Photo;
-	public TextFieldCustom textField_Children;
-	public TextFieldCustom textField_Spouse;
-	public RadioButtonCustom radioButtonMale;
-	public RadioButtonCustom radioButtonFemale;
-	public ButtonGroup buttonGroupSex;
+	public Input input;
+	public Notice notice;
 	private JTextField textField_Search;
+	private JLabel motherLabel;
+	private JLabel spouseLabel;
+	private JLabel childrenLabel;
+	private JLabel nameLabel;
+	private JLabel birthYearLabel;
+	private JPanel photoPanel;
+	private JLabel fatherLabel;
+	private JLabel photoLabel;
 
 	/**
 	 * Launch the application.
@@ -71,12 +73,14 @@ public class FamilyTreeView extends JFrame {
 	public FamilyTreeView() {
 		this.model = new FamilyTreeModel();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 505, 655);
+		setBounds(100, 100, 504, 498);
 		setResizable(false);
 		setTitle("Family Tree");
 		setLocationRelativeTo(null);
 		GlassPanePopup.install(this);
 		FamilyTreeController action = new FamilyTreeController(this);
+		input = new Input();
+		notice = new Notice();
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(250, 237, 205));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -84,29 +88,13 @@ public class FamilyTreeView extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		this.model.addPerson("Adam", "photo1.png", 1850, true, null, null);
-		this.model.addPerson("Liam", "photo2.png", 1870, true, "Adam", "Eva");
-		this.model.addPerson("Martha", "photo4.png", 1874, false, "Adam", "Eva");
-		this.model.addPerson("William", "photo3.png", 1875, true, "Adam", "Eva");
-		this.model.addPerson("Kim", "photo23.png", 18777, false, "Adam", "Eva");
-		this.model.addPerson("James", "photo5.png", 1890, true, "Liam", "Serena");
-		this.model.addPerson("Gemma", "photo6.png", 1891, false, "Liam", "Serena");
-		this.model.addPerson("Alexander", "photo7.png", 1893, true, "Liam", "Serena");
-		this.model.addPerson("Aurelia", "photo8.png", 1895, false, "William", "Fiona");
-		this.model.addPerson("Miranda", "photo9.png", 1895, false, "Paul", "Martha");
-		this.model.addPerson("Ben", "photo10.png", 1896, true, "Paul", "Martha");
-		this.model.addPerson("Ethan", "photo11.png", 1897, true, "Paul", "Martha");
-		this.model.addPerson("Ladonna", "photo12.png", 1898, false, "Paul", "Martha");
-		this.model.addPerson("Logan", "photo13.png", 1920, true, "James", "Mirabel");
-		this.model.addPerson("Charles", "photo14.png", 1920, true, "Jack", "Aurelia");
-		this.model.addPerson("Melanie", "photo15.png", 1921, false, "Jack", "Aurelia");
-		this.model.addPerson("Bertha", "photo16.png", 1920, false, "Ben", "Xavia");
-		this.model.addPerson("Evan", "photo17.png", 1921, true, "Ben", "Xavia");
-		this.model.addPerson("Clara", "photo18.png", 1922, false, "Ben", "Xavia");
-		this.model.addPerson("Luke", "photo19.png", 1944, true, "David", "Clara");
-		this.model.addPerson("Daniel", "photo20.png", 1970, true, "Luke", "Zelda");
-		this.model.addPerson("Leo", "photo21.png", 1971, true, "Luke", "Zelda");
-		this.model.addPerson("Jade", "photo22.png", 1995, false, "Leo", "Giselle");
+		this.model.addPerson("Adam", "Male1.jpg", 1850, true, null, null);
+		this.model.addPerson("Liam", "Male2.jpg", 1870, true, "Adam", "Eva");
+		this.model.addPerson("Martha", "Female1.jpg", 1874, false, "Adam", "Eva");
+		this.model.addPerson("William", "Male3.jpg", 1875, true, "Adam", "Eva");
+		this.model.addPerson("James", "Male4.jpg", 1890, true, "Liam", "Serena");
+		this.model.addPerson("Gemma", "Female2.jpg", 1891, false, "Liam", "Serena");
+		this.model.addPerson("Charles", "Male5.jpg", 1900, true, "Jack", "Martha");
 
 		this.model.setRoot("Adam");
 		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(this.model.getRoot().getName());
@@ -115,6 +103,7 @@ public class FamilyTreeView extends JFrame {
 		tree = new JTree(rootNode);
 		tree.setShowsRootHandles(true);
 		tree.setRootVisible(true);
+
 		tree.setCellRenderer(new CustomTreeCellRenderer());
 
 		JScrollPane scrollPane = new JScrollPane(tree);
@@ -125,99 +114,25 @@ public class FamilyTreeView extends JFrame {
 		scrollPane.setBounds(5, 57, 252, 325);
 		contentPane.add(scrollPane);
 
-		JLabel Label_Name = new JLabel("Name:");
-		Label_Name.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		Label_Name.setBounds(25, 416, 75, 25);
-		contentPane.add(Label_Name);
-
-		textField_Name = new TextFieldCustom();
-		textField_Name.setColumns(10);
-		textField_Name.setBounds(99, 412, 100, 42);
-		contentPane.add(textField_Name);
-
-		textField_BirthYear = new TextFieldCustom();
-		textField_BirthYear.setColumns(10);
-		textField_BirthYear.setBounds(99, 462, 100, 42);
-		contentPane.add(textField_BirthYear);
-
-		JLabel Label_BirthYear = new JLabel("BirthYear:");
-		Label_BirthYear.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		Label_BirthYear.setBounds(25, 466, 75, 25);
-		contentPane.add(Label_BirthYear);
-
-		JLabel Label_Photo = new JLabel("Photo:");
-		Label_Photo.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		Label_Photo.setBounds(25, 515, 75, 25);
-		contentPane.add(Label_Photo);
-
-		textField_Photo = new TextFieldCustom();
-		textField_Photo.setColumns(10);
-		textField_Photo.setBounds(99, 512, 100, 42);
-		contentPane.add(textField_Photo);
-
 		Button btnAdd = new Button("Add");
 		btnAdd.addActionListener(action);
 		btnAdd.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		btnAdd.setBounds(15, 562, 81, 45);
+		btnAdd.setBounds(208, 404, 81, 45);
 		contentPane.add(btnAdd);
 
 		Button btnDelete = new Button("Delete");
 		btnDelete.addActionListener(action);
 		btnDelete.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		btnDelete.setBounds(109, 562, 81, 45);
+		btnDelete.setBounds(390, 404, 81, 45);
 		contentPane.add(btnDelete);
 
-		Button btnUpdate = new Button("Update");
-		btnUpdate.addActionListener(action);
-		btnUpdate.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		btnUpdate.setBounds(200, 562, 81, 45);
-		contentPane.add(btnUpdate);
+		Button btnEdit = new Button("Update");
+		btnEdit.setText("Edit");
+		btnEdit.addActionListener(action);
+		btnEdit.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		btnEdit.setBounds(299, 404, 81, 45);
+		contentPane.add(btnEdit);
 
-		radioButtonMale = new RadioButtonCustom("Male");
-		radioButtonMale.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		radioButtonMale.setBounds(224, 517, 62, 23);
-		contentPane.add(radioButtonMale);
-
-		radioButtonFemale = new RadioButtonCustom("Female");
-		radioButtonFemale.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		radioButtonFemale.setBounds(300, 517, 75, 23);
-		contentPane.add(radioButtonFemale);
-
-		buttonGroupSex = new ButtonGroup();
-		buttonGroupSex.add(radioButtonMale);
-		buttonGroupSex.add(radioButtonFemale);
-
-		Button btnCancel = new Button("Cancel");
-		btnCancel.addActionListener(action);
-		btnCancel.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		btnCancel.setBounds(291, 562, 81, 45);
-		contentPane.add(btnCancel);
-
-		Button btnSave = new Button("Save");
-		btnSave.addActionListener(action);
-		btnSave.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		btnSave.setBounds(382, 562, 81, 45);
-		contentPane.add(btnSave);
-
-		textField_Spouse = new TextFieldCustom();
-		textField_Spouse.setColumns(10);
-		textField_Spouse.setBounds(300, 412, 100, 42);
-		contentPane.add(textField_Spouse);
-
-		JLabel Label_Spouse = new JLabel("Spouse:");
-		Label_Spouse.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		Label_Spouse.setBounds(224, 416, 75, 25);
-		contentPane.add(Label_Spouse);
-
-		JLabel Label_Children = new JLabel("Children:");
-		Label_Children.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		Label_Children.setBounds(224, 466, 75, 25);
-		contentPane.add(Label_Children);
-
-		textField_Children = new TextFieldCustom();
-		textField_Children.setColumns(10);
-		textField_Children.setBounds(300, 463, 100, 42);
-		contentPane.add(textField_Children);
 
 		JSeparator separator = new JSeparator();
 		separator.setBounds(10, 393, 475, 8);
@@ -229,48 +144,48 @@ public class FamilyTreeView extends JFrame {
 		detailPanel.setLayout(null);
 		contentPane.add(detailPanel);
 
-		JPanel photoPanel = new JPanel();
-		photoPanel.setBounds(23, 36, 181, 181);
+		photoPanel = new JPanel();
+		photoPanel.setBounds(18, 36, 184, 181);
 		photoPanel.setBackground(new Color(254, 250, 224));
 		detailPanel.add(photoPanel);
-		JLabel photoLabel = new JLabel();
+		photoLabel = new JLabel();
 		photoPanel.add(photoLabel);
 
-		JLabel birthYearLabel = new JLabel();
-		birthYearLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		birthYearLabel.setForeground(new Color(107, 112, 92));
-		birthYearLabel.setBounds(10, 227, 194, 19);
-		detailPanel.add(birthYearLabel);
-
-		JLabel fatherLabel = new JLabel();
+		fatherLabel = new JLabel();
 		fatherLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		fatherLabel.setForeground(new Color(107, 112, 92));
 		fatherLabel.setBounds(10, 246, 194, 19);
 		detailPanel.add(fatherLabel);
 
-		JLabel motherLabel = new JLabel();
+		motherLabel = new JLabel();
 		motherLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		motherLabel.setForeground(new Color(107, 112, 92));
 		motherLabel.setBounds(10, 265, 194, 19);
 		detailPanel.add(motherLabel);
 
-		JLabel spouseLabel = new JLabel();
+		spouseLabel = new JLabel();
 		spouseLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		spouseLabel.setForeground(new Color(107, 112, 92));
 		spouseLabel.setBounds(10, 284, 194, 19);
 		detailPanel.add(spouseLabel);
 
-		JLabel childrenLabel = new JLabel();
+		childrenLabel = new JLabel();
 		childrenLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		childrenLabel.setForeground(new Color(107, 112, 92));
 		childrenLabel.setBounds(10, 303, 194, 19);
 		detailPanel.add(childrenLabel);
 
-		JLabel nameLabel = new JLabel();
+		nameLabel = new JLabel();
 		nameLabel.setFont(new Font("Tahoma", Font.BOLD, 19));
 		nameLabel.setBounds(10, 9, 110, 30);
 		nameLabel.setForeground(new Color(107, 112, 92));
 		detailPanel.add(nameLabel);
+
+		birthYearLabel = new JLabel();
+		birthYearLabel.setBounds(10, 228, 194, 19);
+		detailPanel.add(birthYearLabel);
+		birthYearLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		birthYearLabel.setForeground(new Color(107, 112, 92));
 
 		JLabel Name = new JLabel("Enter the name:");
 		Name.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -287,14 +202,25 @@ public class FamilyTreeView extends JFrame {
 		btnSearchButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnSearchButton.setBounds(356, 7, 107, 45);
 		contentPane.add(btnSearchButton);
+
+		input.btnSave.addActionListener(action);
+		input.btnCancel.addActionListener(action);
+		notice.cmdYes.addActionListener(action);
+		
 		tree.addTreeSelectionListener(e -> {
 			DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
 			if (selectedNode != null && selectedNode.getUserObject() instanceof String) {
 				Person person = FamilyTreeModel.people.get(selectedNode.getUserObject());
 				nameLabel.setText(person.getName());
-
-				if (person.isMale()) {
-					ImageIcon icon = new ImageIcon(getClass().getResource("/Images/boy.png"));
+				String photoString = "";
+				if (person.getPhoto() == "") {
+					if (person.isMale()) {
+						photoString = "MaleDefault.png";
+					}
+					else {
+						photoString = "FemaleDefault.png";
+					}
+					ImageIcon icon = new ImageIcon(getClass().getResource("/Images/" + photoString));
 					BufferedImage bufferedImage = new BufferedImage(181, 181, BufferedImage.TYPE_INT_ARGB);
 					Graphics2D g2d = bufferedImage.createGraphics();
 					g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -303,8 +229,9 @@ public class FamilyTreeView extends JFrame {
 					g2d.dispose();
 					ImageIcon newIcon = new ImageIcon(bufferedImage);
 					photoLabel.setIcon(newIcon);
+					
 				} else {
-					ImageIcon icon = new ImageIcon(getClass().getResource("/Images/girl.png"));
+					ImageIcon icon = new ImageIcon(getClass().getResource("/Images/" + person.getPhoto()));
 					BufferedImage bufferedImage = new BufferedImage(181, 181, BufferedImage.TYPE_INT_ARGB);
 					Graphics2D g2d = bufferedImage.createGraphics();
 					g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -314,6 +241,8 @@ public class FamilyTreeView extends JFrame {
 					ImageIcon newIcon = new ImageIcon(bufferedImage);
 					photoLabel.setIcon(newIcon);
 				}
+				
+				
 
 				birthYearLabel.setText("Birth Year: " + person.getBirthYear());
 
@@ -368,15 +297,22 @@ public class FamilyTreeView extends JFrame {
 		}
 	}
 
-	public void deleteForm() {
-		textField_Name.setText("");
-		textField_BirthYear.setText("");
-		textField_Photo.setText("");
-		textField_Spouse.setText("");
-		textField_Children.setText("");
-		buttonGroupSex.clearSelection();
+	public void showForm() {
+		GlassPanePopup.showPopup(input);
 	}
 
+	public void deleteForm() {
+		input.textField_Name.setText("");
+		input.textField_BirthYear.setText("");
+		input.textField_Photo.setText("");
+		input.textField_Spouse.setText("");
+		input.textField_Children.setText("");
+		input.buttonGroupSex.clearSelection();
+	}
+
+	public void giveNotice( ) {
+		GlassPanePopup.showPopup(notice);
+	}
 	public void deletePerson() {
 		DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
 		DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) selectedNode.getParent();
@@ -399,17 +335,24 @@ public class FamilyTreeView extends JFrame {
 		Person parent = FamilyTreeModel.people.get(parentNode.getUserObject());
 		Person person = FamilyTreeModel.people.get(selectedNode.getUserObject());
 		parent.getChildren().remove(person);
+		nameLabel.setText("");
+		photoLabel.setIcon(null);
+		birthYearLabel.setText("");
+		fatherLabel.setText("");
+		motherLabel.setText("");
+		spouseLabel.setText("");
+		childrenLabel.setText("");
 	}
 
 	public void showSelectedPerson() {
-
+		GlassPanePopup.showPopup(input);
 		DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
 		Person person = FamilyTreeModel.people.get(selectedNode.getUserObject());
-		this.textField_Name.setText(person.getName());
-		this.textField_Name.setEditable(false);
-		this.textField_Children.setEditable(false);
-		this.textField_BirthYear.setText(person.getBirthYear() + "");
-		this.textField_Photo.setText(person.getPhoto());
+		input.textField_Name.setText(person.getName());
+		input.textField_Name.setEditable(false);
+		input.textField_Children.setEditable(false);
+		input.textField_BirthYear.setText(person.getBirthYear() + "");
+		input.textField_Photo.setText(person.getPhoto());
 		ArrayList<Person> children = person.getChildren();
 		if (!children.isEmpty()) {
 			String string = "";
@@ -420,37 +363,49 @@ public class FamilyTreeView extends JFrame {
 					string = string + children.get(i).getName() + ", ";
 				}
 			}
-			this.textField_Children.setText(string);
+			input.textField_Children.setText(string);
 		} else {
-			this.textField_Children.setText("null");
+			input.textField_Children.setText("null");
 		}
 
 		Person spouse = person.getSpouse();
 		if (spouse != null) {
-			this.textField_Spouse.setText("" + spouse.getName());
+			input.textField_Spouse.setText("" + spouse.getName());
 		} else {
-			this.textField_Spouse.setText("null");
+			input.textField_Spouse.setText("null");
 		}
 
 		if (person.isMale()) {
-			radioButtonMale.setSelected(true);
+			input.jRadioButtonMale.setSelected(true);
 		} else {
-			radioButtonFemale.setSelected(true);
+			input.jRadioButtonFemale.setSelected(true);
 		}
 	}
 
 	public void addOrUpdatePerson() {
-		String name = this.textField_Name.getText();
-		int birthYear = Integer.parseInt(this.textField_BirthYear.getText());
-		String photo = this.textField_Photo.getText();
+		String name = input.textField_Name.getText().trim();
+		int birthYear = Integer.parseInt(input.textField_BirthYear.getText());
+		if (birthYear > 2023 || birthYear < 1800) {
+			Message obj = new Message();
+			obj.txt.setText("Invalid birth year!");
+			obj.eventOK(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent ae) {
+					System.out.println("Click OK");
+					GlassPanePopup.closePopupLast();
+				}
+			});
+			GlassPanePopup.showPopup(obj);
+		}
+		String photo = input.textField_Photo.getText().trim();
 		boolean sex = false;
-		if (this.radioButtonMale.isSelected()) {
+		if (input.jRadioButtonMale.isSelected()) {
 			sex = true;
-		} else if (this.radioButtonFemale.isSelected()) {
+		} else if (input.jRadioButtonFemale.isSelected()) {
 			sex = false;
 		}
-		String spouseName = this.textField_Spouse.getText();
-		String childrensName = this.textField_Children.getText();
+		String spouseName = input.textField_Spouse.getText().trim();
+		String childrensName = input.textField_Children.getText().trim();
 		Person p = new Person(name, photo, birthYear, sex);
 		ArrayList<Person> listChildren = new ArrayList<>();
 		StringTokenizer stk = new StringTokenizer(childrensName, ",");
@@ -527,8 +482,8 @@ public class FamilyTreeView extends JFrame {
 			}
 
 		}
-		this.textField_Name.setEditable(true);
-		this.textField_Children.setEditable(true);
+		input.textField_Name.setEditable(true);
+		input.textField_Children.setEditable(true);
 	}
 
 	public static DefaultMutableTreeNode findNode(DefaultTreeModel model, DefaultMutableTreeNode node, String search) {
@@ -541,7 +496,7 @@ public class FamilyTreeView extends JFrame {
 				return foundNode;
 			}
 		}
-		return null; // Không tìm thấy nút
+		return null;
 	}
 
 	public void findPerson() {

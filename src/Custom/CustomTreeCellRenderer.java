@@ -17,6 +17,7 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
 	public CustomTreeCellRenderer() {
 		label = new JLabel();
 		label.setOpaque(true);
+		label.setFont(new Font("Tahoma", Font.PLAIN, 19));
 	}
 
 	@Override
@@ -25,7 +26,6 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
 		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 
 		this.setFocusable(false);
-		setFont(new Font("Tahoma", Font.PLAIN, 14));
 		setForeground(new Color(107, 112, 92));
 		setBorder(null);
 		Object userObject = ((DefaultMutableTreeNode) value).getUserObject();
